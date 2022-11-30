@@ -1,0 +1,121 @@
+# Find Directories between two dates
+find . -type d -newermt "2019-01-01" \! -newermt "2019-02-01" -exec ls -ld {} \;
+
+# Varient - Find files instead of directories
+find . -type f -newermt "2019-01-01" \! -newermt "2019-02-01" -exec ls -ld {} \;
+
+# generate random 6 digit number
+python -c 'import random; print(random.randint(0,1000000-1))'
+
+# generate a random 8 character word
+perl -le 'print map { (a..z)[rand 26] } 1..8'
+
+
+# Ternary conditional clause
+[ test_statement ] && ( then_statement ) || ( else_statement );
+
+# get executed scripts current working directory
+CWD=$(cd "$(dirname "$0")" && pwd)
+
+# make a new folder and cd into it
+mkcd(){ NAME=$1; mkdir -p "$NAME"; cd "$NAME"; }
+
+
+# generate a sequence of numbers
+perl -e 'print "$_\n" for (1..10);'
+
+echo {01..10}
+
+for ((i=1; i<=10; ++i)); do echo $i; done
+
+
+# shuffle lines 
+ps -ef | perl -MList::Util=shuffle -e 'print shuffle <>;'
+
+
+# run command and stick the output into the clipboard on mac
+echo "send this to standard out and to my clipboard" | tee >(pbcopy)
+
+# replace duplicated characters in string with single occureance
+echo 111122223444566667899 | sed 's/\(.\)\1*/\1/g'
+
+# tree listing of directory
+tree . 
+
+# convert string to lower case
+echo HELLO | tr 'A-Z' 'a-z'
+
+echo HELLO | tr '[:upper:]' '[:lower:]'
+
+echo HELLO | perl -ne 'print lc'
+
+echo HELLO | awk '{print tolower($0)}'
+
+# get the load average on your system
+python -c 'import os; print(os.getloadavg()[0])'
+
+# recording ssh sessions
+ssh -l USER HOST | tee -a /path/to/file
+
+# view a file with line numbers 
+grep -n ^ myfile | less   /# my prefered as it allows for easier searching
+
+perl -ne 'print "$. $_"' myfile | less /# puts numbers at position 1 so can search with /^###
+
+cat -n myfile | less
+
+# use perl to replace 1 thing for another in mutiple files
+perl -pi -e 's/you/me/g' filea fileb filec
+
+perl -pi.bkp -e 's/you/me/g'  /# same as above but backs up each file with .bkp extension
+
+perl -pi -e 's/you/me/g if /some pattern/' /# only replace on lines that also have 'some pattern'
+
+perl -pi -e 's/you/me/g if /\d/'  /# any regex can be used this looks for lines with numbers before replacing
+
+# find duplicate lines from a file
+perl -ne 'print if $a{$_}++' filename
+
+# can combine line number with duplicate find to show the line number containing duplicates
+perl -ne 'print "$. $_" if $a{$_}++' filename
+
+# remove blank lines from file in place
+perl -i -ne'print if /\w/' filename
+
+# remove range of lines from file in place
+perl -i.old -ne 'print unless 1 .. 10' myfile  # this will remove first 10 lines of file
+
+
+# find the date # many days ago
+perl -MPOSIX -le ' @now = localtime; $now[3] -= 365; print scalar localtime mktime @now'
+
+# sum a column of numbers
+ps -ef | perl -lane '$sum += $F[0]; END { print $sum }'  # replace the 0 with column number to sum
+
+# collapse white space in data replace with commas to form csv
+ls -l | tr -s '[:blank:]' ','
+
+# use perl to pull collumn from data based on a particular seperator
+ls -l | tr -s '[:blank:]' ':' | perl -a -F: -nle 'print $F[5]' # use colon for seperator and get 6th field
+
+# see special characters in a file -- note: sometimes these special characters cause unexepcted results
+sed -n 'l' filename
+
+cat -tev filename
+
+# reverse input lines
+perl -e 'print reverse <>'
+
+# reverse each row of characters line by line
+perl -nle 'print scalar reverse $_' 
+
+# reverse all incoming data as a whole
+perl -0777e 'print scalar reverse <>' 
+
+# example of why that might be handy -- get all file extensions in current directory
+ls -l | perl -0777e 'print scalar reverse <>' | cut -s -d. -f1 | perl -0777e 'print scalar reverse <>'  | sort -u
+
+# unsual but interesting -- incriment any numbers found within file
+perl -i -pe 's/(\d+)/ 1 + $1 /ge' myfile
+
+
